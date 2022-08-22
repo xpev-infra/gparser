@@ -80,6 +80,14 @@ func calculateForString(x, y interface{}, op token.Token) interface{} {
 		return xString == yString
 	case token.NEQ: // !=
 		return xString != yString
+	case token.LSS: // <
+		return xString < yString
+	case token.GTR: // >
+		return xString > yString
+	case token.LEQ: // <=
+		return xString <= yString
+	case token.GEQ: // >=
+		return xString >= yString
 	}
 	return errors.New(fmt.Sprintf("unsupported binary operator: %s", op.String()))
 }
