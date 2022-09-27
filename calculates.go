@@ -172,30 +172,3 @@ func versionCompare(version1 string, version2 string) (int, error) {
 	}
 	return res, nil
 }
-
-//
-//func compareStringByFloat(x, y, operate string) bool {
-//	v1, err := strconv.ParseFloat(x, 32)
-//	if err != nil {
-//		return false
-//	}
-//
-//	v2, err := strconv.ParseFloat(y, 32)
-//	if err != nil {
-//		return false
-//	}
-//
-//	switch operate {
-//	case ">":
-//		return v1 > v2
-//	case ">=":
-//		return v1 >= v2
-//	case "<":
-//		return v1 < v2
-//	case "<=":
-//		return v1 <= v2
-//	default:
-//		return false
-//	}
-//
-//}
