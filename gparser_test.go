@@ -166,9 +166,42 @@ func TestGoParser_Match(t *testing.T) {
 		},
 		{
 			name: "test_case_16",
-			expr: " contain_organization(a,[]string{\"111111/222222\"})",
+			expr: "contain_organization(a,[]string{\"111111/222222\"})",
 			data: map[string]interface{}{
 				"a": "111111/222222/333333",
+			},
+			want: true,
+		},
+		{
+			name: "test_case_17",
+			expr: "osVersion > \"10\"",
+			data: map[string]interface{}{
+				"osVersion": "7",
+			},
+			want: false,
+		},
+		{
+			name: "test_case_18",
+			expr: "compare_version(version,\"1.0\",\">\")",
+			data: map[string]interface{}{
+				"version": "1.1",
+			},
+			want: true,
+		},
+		{
+			name: "test_case_18",
+			expr: "compare_version(version,\"1.0.0\",\">=\")",
+			data: map[string]interface{}{
+				"version": "0.9.1",
+			},
+			want: false,
+		},
+		{
+			name: "test_case_18",
+			expr: "compare_version(version,\"1.0\",\"<=\") && a == 1",
+			data: map[string]interface{}{
+				"version": "0.9.1",
+				"a":       1,
 			},
 			want: true,
 		},

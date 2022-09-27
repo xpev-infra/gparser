@@ -16,6 +16,7 @@ func init() {
 		"start_with":           startWith,
 		"in_organization":      inOrganization,
 		"contain_organization": containOrg,
+		"compare_version":      compareVersion,
 	}
 }
 
@@ -174,5 +175,49 @@ func containOrg(args []ast.Expr, data map[string]interface{}) interface{} {
 	}
 
 	return false
+
+}
+
+func compareVersion(args []ast.Expr, data map[string]interface{}) interface{} {
+	// 规则表达式中的变量
+	param := eval(args[0], data)
+	versionLit, ok := args[1].(*ast.BasicLit)
+	if !ok {
+		return false
+	}
+
+	operate, ok := args[2].(*ast.BasicLit)
+	if !ok {
+		return false
+	}
+
+	param, err := castType(param, TypeString)
+	if err != nil {
+		return false
+	}
+
+	version := strings.Trim(versionLit.Value, "\"")
+
+	result, err := versionCompare(param.(string), version)
+	if err != nil {
+		return err
+	}
+
+	switch strings.Trim(operate.Value, "\"") {
+	case ">":
+		return result == 1
+	case ">=":
+		return result == 1 || result == 0
+	case "=":
+		return result == 0
+	case "!=":
+		return result != 0
+	case "<":
+		return result == -1
+	case "<=":
+		return result == -1 || result == 0
+	default:
+		return false
+	}
 
 }
