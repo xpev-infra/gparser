@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"go/ast"
 	"go/token"
+	"strconv"
+	"strings"
 )
 
 // 计算int类型表达式
@@ -80,6 +82,14 @@ func calculateForString(x, y interface{}, op token.Token) interface{} {
 		return xString == yString
 	case token.NEQ: // !=
 		return xString != yString
+	case token.LSS: // <
+		return xString < yString
+	case token.GTR: // >
+		return xString > yString
+	case token.LEQ: // <=
+		return xString <= yString
+	case token.GEQ: // >=
+		return xString >= yString
 	}
 	return errors.New(fmt.Sprintf("unsupported binary operator: %s", op.String()))
 }
@@ -118,4 +128,47 @@ func calculateForFunc(funcName string, args []ast.Expr, data map[string]interfac
 		return errors.New(fmt.Sprintf("%+v func not support", funcName))
 	}
 	return handler(args, data)
+}
+
+// versionCompare
+// @Description: 比较 a b 版本号大小
+// @param version1 eg 1.0.0
+// @param version2 eg 0.
+// @return int  a<b -1, a=b 0 , a>b 1
+// @return error
+func versionCompare(version1 string, version2 string) (int, error) {
+	var res int
+	ver1Str := strings.Split(version1, ".")
+	ver2Str := strings.Split(version2, ".")
+	ver1Len := len(ver1Str)
+	ver2Len := len(ver2Str)
+	verLen := ver1Len
+	if len(ver1Str) < len(ver2Str) {
+		verLen = ver2Len
+	}
+	var err error
+	for i := 0; i < verLen; i++ {
+		var ver1Int, ver2Int int
+		if i < ver1Len {
+			ver1Int, err = strconv.Atoi(ver1Str[i])
+			if err != nil {
+				return 0, err
+			}
+		}
+		if i < ver2Len {
+			ver2Int, err = strconv.Atoi(ver2Str[i])
+			if err != nil {
+				return 0, err
+			}
+		}
+		if ver1Int < ver2Int {
+			res = -1
+			break
+		}
+		if ver1Int > ver2Int {
+			res = 1
+			break
+		}
+	}
+	return res, nil
 }

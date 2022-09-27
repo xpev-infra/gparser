@@ -45,7 +45,7 @@ func eval(expr ast.Expr, data map[string]interface{}) interface{} {
 	case *ast.BinaryExpr: // 匹配到子树
 		x := eval(expr.X, data)
 		y := eval(expr.Y, data)
-		if x == nil || y == nil {
+		if y == nil {
 			return errors.New(fmt.Sprintf("%+v, %+v is nil", x, y))
 		}
 		op := expr.Op

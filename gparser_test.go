@@ -73,7 +73,7 @@ func TestGoParser_Match(t *testing.T) {
 			want: false,
 		},
 		{
-			name: "test_case7",
+			name: "test_case6",
 			expr: "!(a == 1 && b == 2 && c == \"test\" && d == false)",
 			data: map[string]interface{}{
 				"a": 1,
@@ -84,7 +84,7 @@ func TestGoParser_Match(t *testing.T) {
 			want: true,
 		},
 		{
-			name: "test_case8",
+			name: "test_case7",
 			expr: "!(a == 1 && b == 2) || (c == \"test\" && d == false)",
 			data: map[string]interface{}{
 				"a": 1,
@@ -95,15 +95,114 @@ func TestGoParser_Match(t *testing.T) {
 			want: true,
 		},
 		{
-			name: "test_case9",
-			expr: "a == 1 && b == 2",
-			data: nil,
+			name: "test_case8",
+			expr: "a >= \"0.0.1\" && c <= \"1.0.0\" && b < \"1.0.0\"",
+			data: map[string]interface{}{
+				"a": "0.0.2",
+				"b": "0.9.9",
+				"c": "1.0.0",
+			},
+			want: true,
+		},
+		{
+			name: " test_case9",
+			expr: `in_array(a, []string{"12131","0989988"})`,
+			data: map[string]interface{}{
+				"a": "12131",
+			},
+			want: true,
+		},
+		{
+			name: "tset_case10",
+			expr: "start_with(a,\"111111111/222222222\")",
+			data: map[string]interface{}{
+				"a": "111111111/222222222/333333",
+			},
+			want: true,
+		},
+		{
+			// 测试部门匹配的case
+			name: "test_case11",
+			expr: "in_organization(a,\"111111111/222222222\")",
+			data: map[string]interface{}{
+				"a": "111111111/222222222/333333",
+			},
+			want: true,
+		},
+		{
+			// 测试部门不匹配的case
+			name: "test_case13",
+			expr: "in_organization(a,\"111111111/44444444\")",
+			data: map[string]interface{}{
+				"a": "111111111/222222222/333333",
+			},
 			want: false,
 		},
 		{
-			name: "test_case10",
-			expr: "",
-			data: nil,
+			// 测试data中的变量不覆盖规则中的变量
+			name: "test_case14",
+			expr: " a == \"test\" && b == \"test02\"",
+			data: map[string]interface{}{
+				"a": "test",
+			},
+			want: false,
+		},
+		{
+			// 测试data中的变量不覆盖规则中的变量
+			name: "test_case15",
+			expr: " a == \"test\" || b == \"test02\"",
+			data: map[string]interface{}{
+				"a": "test",
+			},
+			want: true,
+		},
+		{
+			name: "test_case_16",
+			expr: " contain_organization(a,[]string{\"111111/222222/333333\",\"1111111/222222/444444\"})",
+			data: map[string]interface{}{
+				"a": "333333",
+			},
+			want: false,
+		},
+		{
+			name: "test_case_16",
+			expr: "contain_organization(a,[]string{\"111111/222222\"})",
+			data: map[string]interface{}{
+				"a": "111111/222222/333333",
+			},
+			want: true,
+		},
+		{
+			name: "test_case_17",
+			expr: "osVersion > \"10\"",
+			data: map[string]interface{}{
+				"osVersion": "7",
+			},
+			want: false,
+		},
+		{
+			name: "test_case_18",
+			expr: "compare_version(version,\"1.0\",\">\")",
+			data: map[string]interface{}{
+				"version": "1.1",
+			},
+			want: true,
+		},
+		{
+			name: "test_case_18",
+			expr: "compare_version(version,\"1.0.0\",\">=\")",
+			data: map[string]interface{}{
+				"version": "0.9.1",
+			},
+			want: false,
+		},
+		{
+			name: "test_case_18",
+			expr: "compare_version(version,\"1.0\",\"<=\") && a == 1",
+			data: map[string]interface{}{
+				"version": "0.9.1",
+				"a":       1,
+			},
 			want: true,
 		},
 	}
