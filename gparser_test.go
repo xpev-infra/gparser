@@ -162,7 +162,7 @@ func TestGoParser_Match(t *testing.T) {
 			data: map[string]interface{}{
 				"a": "333333",
 			},
-			want: true,
+			want: false,
 		},
 		{
 			name: "test_case_16",
