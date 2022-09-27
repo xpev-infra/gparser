@@ -205,6 +205,14 @@ func TestGoParser_Match(t *testing.T) {
 			},
 			want: true,
 		},
+		{
+			name: "test_case_19",
+			expr: "compare_version(version,\"10\",\">\")",
+			data: map[string]interface{}{
+				"version": "",
+			},
+			want: false,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {

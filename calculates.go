@@ -146,20 +146,13 @@ func versionCompare(version1 string, version2 string) (int, error) {
 	if len(ver1Str) < len(ver2Str) {
 		verLen = ver2Len
 	}
-	var err error
 	for i := 0; i < verLen; i++ {
 		var ver1Int, ver2Int int
 		if i < ver1Len {
-			ver1Int, err = strconv.Atoi(ver1Str[i])
-			if err != nil {
-				return 0, err
-			}
+			ver1Int, _ = strconv.Atoi(ver1Str[i])
 		}
 		if i < ver2Len {
-			ver2Int, err = strconv.Atoi(ver2Str[i])
-			if err != nil {
-				return 0, err
-			}
+			ver2Int, _ = strconv.Atoi(ver2Str[i])
 		}
 		if ver1Int < ver2Int {
 			res = -1
